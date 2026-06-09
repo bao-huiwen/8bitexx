@@ -7,11 +7,11 @@ import './style.css'
 
 const SAVE_KEY = 'bazi-xiuxian-save-v1'
 const choices = [
-  {key:'大凶', delta:{生命力:-28,气运:-18,心魔:26,决策力:-8,性格:-6}},
-  {key:'小凶', delta:{生命力:-12,气运:-8,心魔:12,决策力:-3,性格:-2}},
-  {key:'平', delta:{生命力:0,气运:1,心魔:0,决策力:1,性格:1}},
-  {key:'小吉', delta:{生命力:10,气运:9,心魔:-6,决策力:5,性格:4}},
-  {key:'大吉', delta:{生命力:22,气运:18,心魔:-13,决策力:8,性格:7}},
+  {key:'大凶', text:'强行破阵，赌命夺机缘', delta:{生命力:-28,气运:-18,心魔:26,决策力:-8,性格:-6}},
+  {key:'小凶', text:'听信旁门，借术速成', delta:{生命力:-12,气运:-8,心魔:12,决策力:-3,性格:-2}},
+  {key:'平', text:'稳守本心，顺势而行', delta:{生命力:0,气运:1,心魔:0,决策力:1,性格:1}},
+  {key:'小吉', text:'谨慎试探，取一线机缘', delta:{生命力:10,气运:9,心魔:-6,决策力:5,性格:4}},
+  {key:'大吉', text:'明辨天机，择正道破局', delta:{生命力:22,气运:18,心魔:-13,决策力:8,性格:7}},
 ]
 const chapters = ['子·问道初醒','丑·灵根照骨','寅·山门试炼','卯·草木逢春','辰·洞府机缘','巳·心火劫','午·剑气纵横','未·黄庭筑基','申·金石试炼','酉·月下问心','戌·魔念来袭','亥·归藏终局']
 const story = [
@@ -61,7 +61,7 @@ function App(){
     {!accepted && <section className="disclaimer"><h2>免责声明</h2><p>本游戏内容仅用于传统文化主题娱乐与创意体验。八字、五行、灵根、命格等演算均为游戏化设定，不构成现实命理、医疗、投资、人生决策建议，请勿迷信或据此作出重大决定。</p><button onClick={()=>{setAccepted(true);save(input,true,game)}}>我已知晓，进入游戏</button></section>}
     {accepted && !game && <section className="card"><h2>生辰录入</h2><label>道号/姓名<input value={input.name} onChange={e=>setInput({...input,name:e.target.value})} placeholder="可选"/></label><label>出生日期<input type="date" value={input.date} onChange={e=>setInput({...input,date:e.target.value})}/></label><label>出生时间<input type="time" disabled={input.unknownHour} value={input.time} onChange={e=>setInput({...input,time:e.target.value})}/></label><label className="check"><input type="checkbox" checked={input.unknownHour} onChange={e=>setInput({...input,unknownHour:e.target.checked})}/> 不清楚出生时辰：按五行均衡折中处理</label>{error&&<p className="err">{error}</p>}<button onClick={start}>生成命盘，开始修仙</button></section>}
     {game && <section className="grid"><div className="card"><h2>命盘</h2><div className="pillars">{Object.entries(game.bazi.pillars).map(([k,v])=><div key={k}><small>{{year:'年柱',month:'月柱',day:'日柱',hour:'时柱'}[k]}</small><b>{v}</b></div>)}</div><p>{game.bazi.note}</p><h3>{game.linggen}</h3><p>{game.mingge}</p></div><div className="card"><h2>五行统计</h2>{Object.entries(game.bazi.stats).map(([k,v])=><div className="bar" key={k}><span>{k}</span><i><em style={{width:v+'%',background:elementColor[k]}}/></i><b>{v}%</b></div>)}</div><div className="card"><h2>属性</h2>{Object.entries(game.attrs).map(([k,v])=><div className="bar attr" key={k}><span>{k}</span><i><em style={{width:v+'%'}}/></i><b>{v}</b></div>)}</div></section>}
-    {game && !ended && <section className="card story"><h2>{chapters[game.chapter]}</h2><p>{story[game.chapter]}</p><div className="choices">{choices.map(c=><button key={c.key} onClick={()=>choose(c)}>{c.key}</button>)}</div></section>}
+    {game && !ended && <section className="card story"><h2>{chapters[game.chapter]}</h2><p>{story[game.chapter]}</p><div className="choices">{choices.map(c=><button key={c.key} onClick={()=>choose(c)}>{c.text}</button>)}</div></section>}
     {ending && <section className="card ending"><h2>结局：{ending.title}</h2><h3>{ending.grade}</h3><p>{ending.desc}</p><p>最终命数：{Math.round(finalScore)}</p><ol>{game.log.map((l,i)=><li key={i}>{l.chapter}：{l.choice}</li>)}</ol></section>}
     {game && <footer><button onClick={()=>save()}><Save size={16}/> 本地存档</button><button onClick={screenshot}><Download size={16}/> 截图</button><button onClick={share}><Share2 size={16}/> 分享</button><button onClick={reset}><RotateCcw size={16}/> 重开</button></footer>}
   </main></div>
