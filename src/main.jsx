@@ -45,11 +45,33 @@ function App(){
     }catch(e){setError(e.message)}
   }
   function save(i=input,a=accepted,g=game){localStorage.setItem(SAVE_KEY,JSON.stringify({input:i,accepted:a,game:g}))}
+
   function choose(c){
-    const nextAttrs={...game.attrs}; Object.entries(c.delta).forEach(([k,v])=>nextAttrs[k]=clamp(nextAttrs[k]+v))
-    const next={...game, attrs:nextAttrs, chapter:game.chapter+1, log:[...game.log,{chapter:chapters[game.chapter], choice:c.key}]}
-    setGame(next); save(input,accepted,next)
+  const nextAttrs={...game.attrs}; 
+  Object.entries(c.delta).forEach(([k,v])=>nextAttrs[k]=clamp(nextAttrs[k]+v))
+
+  const next={
+    ...game,
+    attrs:nextAttrs,
+    chapter: game.chapter+1,
+    log:[
+      ...game.log,
+      {
+        chapter:chapters[game.chapter],
+        choice:c.text,
+        result:c.key
+      }
+    ]
   }
+
+  setGame(next); 
+  save(input,accepted,next)
+}
+
+
+
+
+  
   function reset(){localStorage.removeItem(SAVE_KEY); setGame(null); setAccepted(false)}
   async function screenshot(){const canvas=await html2canvas(shotRef.current,{backgroundColor:'#120d16'}); const a=document.createElement('a'); a.download='八字修仙人生.png'; a.href=canvas.toDataURL(); a.click()}
   async function share(){const text=`我在《八字修仙人生》中生成了${game?.linggen||'灵根'}，命格：${game?.mingge||''}`; if(navigator.share){await navigator.share({title:'八字修仙人生',text, url:location.href})}else{await navigator.clipboard.writeText(text+' '+location.href); alert('分享文案已复制')}}
