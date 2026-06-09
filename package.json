@@ -1,0 +1,23 @@
+{
+  "name": "bazi-xiuxian-life",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy": "gh-pages -d dist"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "latest",
+    "vite": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "html2canvas": "latest",
+    "lucide-react": "latest"
+  },
+  "devDependencies": {
+    "gh-pages": "latest"
+  }
+}
